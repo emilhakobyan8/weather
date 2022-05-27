@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import type {ViewStyle} from 'react-native';
 
 type IStyles = {
@@ -7,11 +7,13 @@ type IStyles = {
   flatList: ViewStyle;
 };
 
+const {height} = Dimensions.get('window');
+
 const styles = StyleSheet.create<IStyles>({
   container: {
     flex: 1,
     backgroundColor: '#181818',
-    paddingHorizontal: 8,
+    paddingHorizontal: 16,
   },
   loaderContainer: {
     flex: 1,
@@ -20,6 +22,7 @@ const styles = StyleSheet.create<IStyles>({
   },
   flatList: {
     paddingTop: 130,
+    height: height - 130,
   },
 });
 

@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     paddingVertical: 8,
     paddingHorizontal: 16,
+    marginTop: 8,
   },
   heading: {
     flexDirection: 'row',
@@ -43,6 +44,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
     color: 'white',
+  },
+  draggingStyles: {
+    opacity: 0.8,
+  },
+  deleteButton: {
+    height: 89,
+    width: 75,
+    backgroundColor: '#ee4545',
+    marginTop: 8,
+    justifyContent: 'center',
+    paddingLeft: 25,
+    borderRadius: 8,
   },
 });
 

@@ -1,28 +1,23 @@
-import React, {useState} from 'react';
-import {Text, TextInput} from 'react-native';
+import React from 'react';
+import {Pressable, Text} from 'react-native';
 import {BlurView} from '@react-native-community/blur';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './Header.styles';
 
-const Header = () => {
-  const [searchValue, setSearchValue] = useState<string>('');
-  const handleChange = (value: string) => {
-    setSearchValue(value);
-  };
+Icon.loadFont();
+
+type HeaderProps = {
+  openSearch: () => void;
+};
+
+const Header: React.FC<HeaderProps> = ({openSearch}) => {
   return (
-    <BlurView
-      blurType="dark"
-      blurAmount={20}
-      reducedTransparencyFallbackColor={'black'}
-      style={styles.container}>
+    <BlurView blurType="dark" blurAmount={20} style={styles.container}>
       <Text style={styles.title}>Weather</Text>
-      <TextInput
-        value={searchValue}
-        onChangeText={handleChange}
-        style={styles.searchInput}
-        placeholder="Search for cities"
-        placeholderTextColor="#fffs"
-      />
+      <Pressable style={styles.searchInputView} onPress={openSearch}>
+        <Icon name="search" color="white" />
+        <Text style={styles.searchInputViewLabel}>Search for cities</Text>
+      </Pressable>
     </BlurView>
   );
 };
