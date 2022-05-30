@@ -79,7 +79,7 @@ const CityInfoCard: React.FC<CityInfoCardProps> = ({
           <View style={styles.row}>
             <Icon name="arrow-up-thin" size={20} color="#fff" />
             <Text style={styles.temperatureInfo}>
-              ${Math.round(data.weather.temperature.max)}°
+              {Math.round(data.weather.temperature.max)}°
             </Text>
           </View>
           <View style={styles.row}>
