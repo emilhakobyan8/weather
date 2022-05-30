@@ -1,7 +1,7 @@
 import {gql} from '@apollo/client';
 
-export const searchQuery = gql`
-  query search($name: String!) {
+export const getCityByNameQuery = gql`
+  query getCityByName($name: String!) {
     getCityByName(name: $name) {
       id
       name

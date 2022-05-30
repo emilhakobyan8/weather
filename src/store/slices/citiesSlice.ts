@@ -1,38 +1,39 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ID} from '../../types';
+import {GetCityByName_getCityByName} from '../../screens/HomeScreen/__generated__/GetCityByName';
 
-// Define a type for the slice state
+export type CityMapType = {[key: string]: GetCityByName_getCityByName};
+
 export interface CitiesState {
-  cityIds: any;
-  cityMap: any;
+  cityIds: ID[];
+  cityMap: CityMapType;
   searchData: any;
 }
 
-// Define the initial state using that type
 const initialState: CitiesState = {
   cityIds: [],
   cityMap: {},
   searchData: null,
 };
 
-export const citiesSlice = createSlice({
+const citiesSlice = createSlice({
   name: 'city',
   initialState,
   reducers: {
     setCityList: (state, action) => {
       state.cityMap =
         action.payload?.reduce(
-          (acc, current) => ({
+          (acc: CityMapType, current: GetCityByName_getCityByName) => ({
             ...acc,
-            [current.id]: current,
+            [current.id as keyof GetCityByName_getCityByName]: current,
           }),
           {},
         ) || {};
     },
     storeCityId: (state, action) => {
       state.cityIds = [
-        action.payload,
         ...state.cityIds.filter((id: ID) => id !== action.payload),
+        action.payload,
       ];
     },
     setSortedIds: (state, action) => {
@@ -45,19 +46,12 @@ export const citiesSlice = createSlice({
       delete updatedCityMap[action.payload];
       state.cityMap = updatedCityMap;
     },
-    setCityCurrentLocationCity: (state, action) => {
+    setCurrentLocationCity: (state, action) => {
       state.cityMap = {...state.cityMap, [action.payload.id]: action.payload};
       state.cityIds = [
-        action.payload.id,
         ...state.cityIds.filter((id: ID) => id !== action.payload.id),
+        action.payload.id,
       ];
-    },
-    setSearchData: (state, action) => {
-      if (action.payload) {
-        state.searchData = [action.payload];
-      } else {
-        state.searchData = null;
-      }
     },
   },
 });
@@ -66,9 +60,8 @@ export const {
   setCityList,
   storeCityId,
   removeCity,
-  setSearchData,
   setSortedIds,
-  setCityCurrentLocationCity,
+  setCurrentLocationCity,
 } = citiesSlice.actions;
 
 export default citiesSlice.reducer;

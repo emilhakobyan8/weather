@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,25 +37,36 @@ const styles = StyleSheet.create({
   },
   windInfo: {
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 18,
     color: 'white',
   },
   temperatureInfo: {
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 18,
     color: 'white',
   },
   draggingStyles: {
     opacity: 0.8,
   },
   deleteButton: {
-    height: 89,
     width: 75,
     backgroundColor: '#ee4545',
     marginTop: 8,
+    ...Platform.select({
+      ios: {
+        height: 89,
+      },
+      android: {
+        height: 94.2,
+      },
+    }),
     justifyContent: 'center',
     paddingLeft: 25,
     borderRadius: 8,
+  },
+  row: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 });
 

@@ -1,20 +1,12 @@
-import React, {
-  DragEventHandler,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, Text, Pressable} from 'react-native';
-import Swipeable, {
-  SwipeableProps,
-} from 'react-native-gesture-handler/Swipeable';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import styles from './CityInfoCard.styles';
-
+import {Units} from '../../types';
+import {useAppSelector} from '../../hooks/store';
+import {unitSelector} from '../../store/selectors/configSelectors';
 Icon.loadFont();
 
 type CityInfoCardProps = {
@@ -25,6 +17,11 @@ type CityInfoCardProps = {
   isFirst: boolean;
 };
 
+const speedUnitsMapping: Record<string, string> = {
+  [Units.metric]: 'mps',
+  [Units.imperial]: 'mph',
+};
+
 const CityInfoCard: React.FC<CityInfoCardProps> = ({
   data,
   onLongPress,
@@ -33,7 +30,7 @@ const CityInfoCard: React.FC<CityInfoCardProps> = ({
   isFirst,
 }) => {
   const [swipeableNode, setSwipeableNode] = useState<Swipeable | null>(null);
-
+  const unit = useAppSelector(unitSelector);
   const animateFirst = useCallback(() => {
     if (isFirst) {
       swipeableNode?.openRight();
@@ -49,12 +46,15 @@ const CityInfoCard: React.FC<CityInfoCardProps> = ({
 
   const rightButtons = () => (
     <Pressable style={styles.deleteButton} onPress={onItemDelete}>
-      <Icon name="trash" size={25} color="#fff" />
+      <Icon name="trash-can-outline" size={25} color="#fff" />
     </Pressable>
   );
 
   return (
-    <Swipeable renderRightActions={rightButtons} ref={setSwipeableNode}>
+    <Swipeable
+      renderRightActions={rightButtons}
+      ref={setSwipeableNode}
+      overshootRight={false}>
       <Pressable
         style={styles.container}
         onLongPress={onLongPress}
@@ -68,16 +68,25 @@ const CityInfoCard: React.FC<CityInfoCardProps> = ({
         </View>
         <View style={styles.footer}>
           <Text style={styles.windInfo}>
-            Wind: {data.weather.wind.speed}km/h
+            <Icon name="weather-windy" size={16} /> {data.weather.wind.speed}
+            {speedUnitsMapping[unit]}
           </Text>
           <Text style={styles.windInfo}>
-            Visibility: {Math.round(data.weather.clouds.visibility / 1000)}km
+            <Icon name="eye-outline" size={16} />
+            {Math.round(data.weather.clouds.visibility / 1000)}km
           </Text>
-          <Text style={styles.temperatureInfo}>
-            {`H: ${Math.round(data.weather.temperature.max)}° M:${Math.round(
-              data.weather.temperature.min,
-            )}°`}
-          </Text>
+          <View style={styles.row}>
+            <Icon name="arrow-up-thin" size={20} color="#fff" />
+            <Text style={styles.temperatureInfo}>
+              ${Math.round(data.weather.temperature.max)}°
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Icon name="arrow-down-thin" size={20} color="#fff" />
+            <Text style={styles.temperatureInfo}>
+              {Math.round(data.weather.temperature.min)}°
+            </Text>
+          </View>
         </View>
       </Pressable>
     </Swipeable>

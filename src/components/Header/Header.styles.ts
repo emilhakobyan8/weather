@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,14 +11,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 8,
     paddingHorizontal: 16,
-    shadowColor: '#c4f1ff',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 5,
+    borderBottomWidth: 0.5,
+    borderColor: '#303032',
+    backgroundColor: 'rgb(25,25,26)',
   },
   title: {
     color: '#fff',
@@ -39,6 +34,28 @@ const styles = StyleSheet.create({
   searchInputViewLabel: {
     color: '#fff',
     marginLeft: 8,
+  },
+  unitButton: {
+    position: 'absolute',
+    top: 40,
+    right: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  unitButtonText: {
+    color: '#fff',
+  },
+  switch: {
+    ...Platform.select({
+      ios: {
+        marginLeft: 6,
+      },
+    }),
+  },
+  switchLabel: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
 

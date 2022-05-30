@@ -4,8 +4,9 @@ import {Platform} from 'react-native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import Geocoder from 'react-native-geocoding';
+import Config from 'react-native-config';
 
-Geocoder.init('AIzaSyCvIODIWmpFYVTv6iK0gZO4290q_d9l_5U');
+Geocoder.init(Config.GOOGLE_API_KEY);
 
 const isIos = Platform.OS === 'ios';
 const defaultCityName = 'Yerevan';

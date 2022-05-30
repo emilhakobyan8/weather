@@ -7,7 +7,7 @@ import {store} from './store/store';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import 'react-native-gesture-handler';
-import LocationProvider from './context/Geocoding.context';
+import LocationProvider from './context/Location.context';
 
 const App = () => {
   return (

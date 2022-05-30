@@ -1,6 +1,7 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistStore, persistReducer} from 'redux-persist';
+
 import slices from './slices';
 import citiesSlice from './slices/citiesSlice';
 
@@ -10,7 +11,7 @@ const persistConfig = {
 };
 
 const cityPersistConfig = {
-  key: 'authReducer',
+  key: 'city',
   storage: AsyncStorage,
   whitelist: ['cityIds'],
 };
@@ -22,7 +23,13 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = configureStore({reducer: persistedReducer});
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
 export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
