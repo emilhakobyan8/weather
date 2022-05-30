@@ -54,10 +54,10 @@ const styles = StyleSheet.create({
     marginTop: 8,
     ...Platform.select({
       ios: {
-        height: 89,
+        height: 94,
       },
       android: {
-        height: 94.2,
+        height: 99,
       },
     }),
     justifyContent: 'center',
