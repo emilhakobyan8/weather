@@ -85,6 +85,7 @@ const HomeScreen = () => {
   });
 
   useEffect(() => {
+    console.warn(storedCityIds);
     if (storedCityIds?.length > 0) {
       refetchCityById(cityListVariables);
     }
@@ -147,7 +148,7 @@ const HomeScreen = () => {
       <Modal isVisible={isSearchModalOpen} closeModal={closeSearchModal}>
         <SearchModal closeModal={closeSearchModal} />
       </Modal>
-      {listLoading ? (
+      {listLoading && !!storedCityIds.length ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="small" color="#fff" />
         </View>
