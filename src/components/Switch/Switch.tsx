@@ -4,7 +4,7 @@ import {Units} from '../../types';
 
 type SwitchProps = {
   onChange: () => void;
-  value: Units;
+  value: string;
   style: ViewStyle;
 };
 
