@@ -7,6 +7,7 @@ import styles from './CityInfoCard.styles';
 import {Units} from '../../types';
 import {useAppSelector} from '../../hooks/store';
 import {unitSelector} from '../../store/selectors/configSelectors';
+
 Icon.loadFont();
 
 type CityInfoCardProps = {
