@@ -1,19 +1,8 @@
-import {Dimensions, Platform, StyleSheet, TextStyle} from 'react-native';
-import type {ViewStyle} from 'react-native';
-
-type IStyles = {
-  searchIconWrapper: ViewStyle;
-  searchInput: ViewStyle;
-  searchInputContainer: ViewStyle;
-  listView: ViewStyle;
-  searchIcon: TextStyle;
-  listRow: ViewStyle;
-  listRowText: TextStyle;
-};
+import {Dimensions, Platform, StyleSheet} from 'react-native';
 
 const {height} = Dimensions.get('window');
 
-const styles = StyleSheet.create<IStyles>({
+const styles = StyleSheet.create({
   searchIconWrapper: {
     width: '100%',
     borderRadius: 8,

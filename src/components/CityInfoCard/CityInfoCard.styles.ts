@@ -1,4 +1,4 @@
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,6 +15,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     marginTop: 8,
+    height: 100,
+    justifyContent: 'space-between',
   },
   heading: {
     flexDirection: 'row',
@@ -52,14 +54,7 @@ const styles = StyleSheet.create({
     width: 75,
     backgroundColor: '#ee4545',
     marginTop: 8,
-    ...Platform.select({
-      ios: {
-        height: 94,
-      },
-      android: {
-        height: 99,
-      },
-    }),
+    height: 100,
     justifyContent: 'center',
     paddingLeft: 25,
     borderRadius: 8,

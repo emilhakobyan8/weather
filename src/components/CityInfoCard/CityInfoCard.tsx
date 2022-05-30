@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import {View, Text, Pressable} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,7 +15,6 @@ type CityInfoCardProps = {
   onLongPress: () => void;
   dragging: boolean;
   onItemDelete: () => void;
-  isFirst: boolean;
 };
 
 const speedUnitsMapping: Record<string, string> = {
@@ -28,18 +27,8 @@ const CityInfoCard: React.FC<CityInfoCardProps> = ({
   onLongPress,
   dragging,
   onItemDelete,
-  isFirst,
 }) => {
-  const [swipeableNode, setSwipeableNode] = useState<Swipeable | null>(null);
   const unit = useAppSelector(unitSelector);
-  const animateFirst = useCallback(() => {
-    if (isFirst) {
-      swipeableNode?.openRight();
-      setTimeout(() => {
-        swipeableNode?.close();
-      }, 500);
-    }
-  }, [swipeableNode, isFirst]);
 
   if (!data?.id) {
     return null;
@@ -52,14 +41,10 @@ const CityInfoCard: React.FC<CityInfoCardProps> = ({
   );
 
   return (
-    <Swipeable
-      renderRightActions={rightButtons}
-      ref={setSwipeableNode}
-      overshootRight={false}>
+    <Swipeable renderRightActions={rightButtons} overshootRight={false}>
       <Pressable
         style={styles.container}
         onLongPress={onLongPress}
-        onPress={animateFirst}
         disabled={dragging}>
         <View style={styles.heading}>
           <Text style={styles.locationName}>{data.name}</Text>

@@ -8,10 +8,11 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import 'react-native-gesture-handler';
 import LocationProvider from './context/Location.context';
+import {StyleSheet} from 'react-native';
 
 const App = () => {
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={styles.root}>
       <GraphQlProvider>
         <Provider store={store}>
           <LocationProvider>
@@ -24,3 +25,7 @@ const App = () => {
 };
 
 export default App;
+
+const styles = StyleSheet.create({
+  root: {flex: 1},
+});

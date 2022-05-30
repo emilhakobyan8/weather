@@ -21,14 +21,13 @@ const citiesSlice = createSlice({
   initialState,
   reducers: {
     setCityList: (state, action) => {
-      state.cityMap =
-        action.payload?.reduce(
-          (acc: CityMapType, current: GetCityByName_getCityByName) => ({
-            ...acc,
-            [current.id as keyof GetCityByName_getCityByName]: current,
-          }),
-          {},
-        ) || {};
+      state.cityMap = action.payload?.reduce(
+        (acc: CityMapType, current: GetCityByName_getCityByName) => ({
+          ...acc,
+          [current.id as keyof GetCityByName_getCityByName]: current,
+        }),
+        {},
+      );
     },
     storeCityId: (state, action) => {
       state.cityIds = [

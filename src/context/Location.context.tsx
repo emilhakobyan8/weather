@@ -13,6 +13,7 @@ const defaultCityName = 'Yerevan';
 
 type LocationContextType = {
   currentCityName: string;
+  setCurrentCityName?: (city: string) => void;
 };
 
 export const LocationContext = React.createContext<LocationContextType>({
@@ -22,7 +23,7 @@ export const LocationContext = React.createContext<LocationContextType>({
 type LocationProviderProps = {};
 
 const LocationProvider: React.FC<LocationProviderProps> = ({children}) => {
-  const [currentCityName, setCurrentCityName] = useState('');
+  const [currentCityName, setCurrentCityName] = useState<string>('');
   const getLocationName = (coords: number[]) => {
     Geocoder.from(coords).then(json => {
       let city = json.results[0].address_components[2];
@@ -38,7 +39,11 @@ const LocationProvider: React.FC<LocationProviderProps> = ({children}) => {
       () => {
         setCurrentCityName(defaultCityName);
       },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      {
+        enableHighAccuracy: true,
+        timeout: 1,
+        maximumAge: 1,
+      },
     );
   }, []);
 
@@ -99,7 +104,7 @@ const LocationProvider: React.FC<LocationProviderProps> = ({children}) => {
   }, [checkAndRequestPermissions]);
 
   return (
-    <LocationContext.Provider value={{currentCityName}}>
+    <LocationContext.Provider value={{currentCityName, setCurrentCityName}}>
       {children}
     </LocationContext.Provider>
   );

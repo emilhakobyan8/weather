@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {useQuery} from '@apollo/client';
 
 import DraggableFlatList, {
@@ -7,8 +7,6 @@ import DraggableFlatList, {
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
 
-import {getCityById, getCityByName} from './HomeScreen.query';
-import styles from './HomeScreen.styles';
 import CityInfoCard from '../../components/CityInfoCard/CityInfoCard';
 import Header from '../../components/Header/Header';
 import Modal from '../../components/Modal/Modal';
@@ -26,13 +24,18 @@ import {
 } from '../../store/slices/citiesSlice';
 import {LocationContext} from '../../context/Location.context';
 import {ID} from '../../types';
+import {unitSelector} from '../../store/selectors/configSelectors';
+
+import {Unit} from '../../../__generated__/globalTypes';
+
+import {getCityById, getCityByName} from './HomeScreen.query';
+import styles from './HomeScreen.styles';
+
 import {GetCityById, GetCityByIdVariables} from './__generated__/GetCityById';
 import {
   GetCityByName,
   GetCityByNameVariables,
 } from './__generated__/GetCityByName';
-import {unitSelector} from '../../store/selectors/configSelectors';
-import {Unit} from '../../../__generated__/globalTypes';
 
 const HomeScreen = () => {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
@@ -41,7 +44,8 @@ const HomeScreen = () => {
   const cityMap = useAppSelector(cityListSelector);
   const unit = useAppSelector(unitSelector);
 
-  const {currentCityName} = useContext(LocationContext);
+  const {currentCityName, setCurrentCityName} = useContext(LocationContext);
+
   const cityListVariables = useMemo(
     () => ({
       id: Object.values(storedCityIds),
@@ -59,25 +63,23 @@ const HomeScreen = () => {
         units: unit as Unit,
       },
     }),
-    [currentCityName, unit],
+    [currentCityName],
   );
 
   const {
     data: cityList,
     error: listFetchingError,
-    loading: listLoading,
     refetch: refetchCityById,
+    loading: listLoading,
   } = useQuery<GetCityById, GetCityByIdVariables>(getCityById, {
     fetchPolicy: 'network-only',
     variables: cityListVariables,
   });
 
-  const {
-    data: cityByName,
-    error: cityFetchingError,
-    loading: nameLoading,
-    refetch: refetchCityByName,
-  } = useQuery<GetCityByName, GetCityByNameVariables>(getCityByName, {
+  const {data: cityByName, error: cityFetchingError} = useQuery<
+    GetCityByName,
+    GetCityByNameVariables
+  >(getCityByName, {
     fetchPolicy: 'network-only',
     variables: cityByNameVariables,
   });
@@ -85,17 +87,8 @@ const HomeScreen = () => {
   useEffect(() => {
     if (storedCityIds?.length > 0) {
       refetchCityById(cityListVariables);
-    } else {
-      refetchCityByName(cityByNameVariables);
     }
-  }, [
-    currentCityName,
-    storedCityIds,
-    refetchCityByName,
-    refetchCityById,
-    cityListVariables,
-    cityByNameVariables,
-  ]);
+  }, [storedCityIds, refetchCityById, cityListVariables]);
 
   useEffect(() => {
     if (cityList?.getCityById && !listFetchingError) {
@@ -123,14 +116,10 @@ const HomeScreen = () => {
 
   const deleteCityFromList = (cityId: ID) => () => {
     dispatch(removeCity(cityId));
+    setCurrentCityName?.('');
   };
 
-  const renderItem = ({
-    item: id,
-    drag,
-    isActive,
-    index,
-  }: RenderItemParams<any>) => {
+  const renderItem = ({item: id, drag, isActive}: RenderItemParams<ID>) => {
     return (
       <OpacityDecorator activeOpacity={0.7}>
         <CityInfoCard
@@ -138,7 +127,6 @@ const HomeScreen = () => {
           onLongPress={drag}
           dragging={isActive}
           onItemDelete={deleteCityFromList(id)}
-          isFirst={!index}
         />
       </OpacityDecorator>
     );
@@ -149,7 +137,7 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <DraggableFlatList
           contentContainerStyle={styles.flatList}
-          data={storedCityIds || []}
+          data={storedCityIds}
           onDragEnd={({data}) => updateList(data)}
           renderItem={renderItem}
           keyExtractor={id => id}
@@ -159,6 +147,11 @@ const HomeScreen = () => {
       <Modal isVisible={isSearchModalOpen} closeModal={closeSearchModal}>
         <SearchModal closeModal={closeSearchModal} />
       </Modal>
+      {listLoading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="small" color="#fff" />
+        </View>
+      ) : null}
     </>
   );
 };
