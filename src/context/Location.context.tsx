@@ -11,10 +11,12 @@ const isIos = Platform.OS === 'ios';
 const defaultCityName = 'Yerevan';
 
 type LocationContextType = {
-  currentCityName?: string;
+  currentCityName: string;
 };
 
-export const LocationContext = React.createContext<LocationContextType>({});
+export const LocationContext = React.createContext<LocationContextType>({
+  currentCityName: defaultCityName,
+});
 
 type LocationProviderProps = {};
 
@@ -72,13 +74,25 @@ const LocationProvider: React.FC<LocationProviderProps> = ({children}) => {
       check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
         switch (result) {
           case RESULTS.DENIED:
-            console.log('Show Yerevan Weather');
+            request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(
+              permissionsStatus => {
+                switch (permissionsStatus) {
+                  case RESULTS.GRANTED:
+                    console.log('getCurrentCoordinates();');
+                    getCurrentCoordinates();
+                    break;
+                  case RESULTS.BLOCKED:
+                    console.log('setCurrentCityName(defaultCityName);');
+                    setCurrentCityName(defaultCityName);
+                }
+              },
+            );
             break;
           case RESULTS.GRANTED:
-            console.log('The permission is granted');
+            getCurrentCoordinates();
             break;
           case RESULTS.BLOCKED:
-            console.log('The permission is denied and not requestable anymore');
+            setCurrentCityName(defaultCityName);
             break;
         }
       });
