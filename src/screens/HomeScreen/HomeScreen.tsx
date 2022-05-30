@@ -85,7 +85,6 @@ const HomeScreen = () => {
   });
 
   useEffect(() => {
-    console.warn(storedCityIds);
     if (storedCityIds?.length > 0) {
       refetchCityById(cityListVariables);
     }
